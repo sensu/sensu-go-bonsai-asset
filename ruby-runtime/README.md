@@ -2,6 +2,9 @@
 
 This directory contains helper scripts that can be used to automate Bonsai asset build as part of Sensu ruby plugin release process.
 
+### Bonsai 
+The provided Bonsai example configuration file `.bonsai.yml.example` defines Sensu assets for each of the supported ruby-runtime platforms.
+
 ### TravisCI Example Usage
 
 Make sure secure `GITHUB_TOKEN` is set travis environment.
