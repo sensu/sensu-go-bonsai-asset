@@ -7,12 +7,12 @@ The provided Bonsai example configuration file `.bonsai.yml.example` defines Sen
 
 ### TravisCI Example Usage
 
-Make sure secure `GITHUB_TOKEN` is set travis environment.
+Make sure secure `GITHUB_TOKEN` is set in the Travis environment using a valid Github personal access token.
 
-Clone into bonsai directory `before_deploy`
+Clone into bonsai directory use TravisCI `before_deploy` hook:
 ```
 before_deploy:
-  - git clone https://github.com/sensu/sensu-go-bonsai-asset.git --branch feature/ruby-plugin-assets bonsai
+  - bash -c "[ ! -d bonsai/ ] && git clone https://github.com/sensu/sensu-go-bonsai-asset.git bonsai || echo 'bonsai/ exists, skipping git clone'"
 ```
 
 Create a deploy provider to run the travis build script
