@@ -5,7 +5,7 @@
 # TravisCI specific asset build script.
 #   Uses several TravisCI specific environment variables 
 ##
-[[ -z "$GITHUB_TOKEN" ]] && { echo "GITHUB_TOKEN is empty" ; exit 1; }
+[[ -z "$GITHUB_TOKEN" ]] && { echo "GITHUB_TOKEN is empty" ; }
 [[ -z "$1" ]] && { echo "Parameter 1, GEM_NAME is empty" ; exit 1; }
 [[ -z "$TRAVIS_REPO_SLUG" ]] && { echo "TRAVIS_REPO_SLUG is empty" ; exit 1; }
 [[ -z "$TRAVIS_COMMIT" ]] && { echo "TRAVIS_COMMIT is empty" ; exit 1; }
@@ -32,8 +32,12 @@ if [ -d dist ]; then
   echo $files
   for filename in $files; do
     if [[ "$TRAVIS_TAG" ]]; then
-      echo "upload $filename"
-      ${WDIR}/github-release-upload.sh github_api_token=$GITHUB_TOKEN repo_slug="$TRAVIS_REPO_SLUG" tag="${TRAVIS_TAG}" filename="$filename"
+      if [[ "$GITHUB_TOKEN" ]]; then
+        echo "upload $filename"
+        ${WDIR}/github-release-upload.sh github_api_token=$GITHUB_TOKEN repo_slug="$TRAVIS_REPO_SLUG" tag="${TRAVIS_TAG}" filename="$filename"
+      else
+	echo "GITUB_TOKEN unset, skipping upload of $filename"      
+      fi	
     fi
   done 
   file=$(basename "${files[0]}")
@@ -50,8 +54,12 @@ if [ -d dist ]; then
     cat "${sha512_file}"
     cd ..
     if [[ "$TRAVIS_TAG" ]]; then
-      echo "upload ${sha512_file}"
-      ${WDIR}/github-release-upload.sh github_api_token=$GITHUB_TOKEN repo_slug="$TRAVIS_REPO_SLUG" tag="${TRAVIS_TAG}" filename="dist/${sha512_file}"
+      if [[ "$GITHUB_TOKEN" ]]; then
+        echo "upload ${sha512_file}"
+        ${WDIR}/github-release-upload.sh github_api_token=$GITHUB_TOKEN repo_slug="$TRAVIS_REPO_SLUG" tag="${TRAVIS_TAG}" filename="dist/${sha512_file}"
+      else
+	echo "GITUB_TOKEN unset, skipping upload of ${sha512_file}"      
+      fi
     fi
   fi
 
