@@ -3,7 +3,7 @@ description: "#{repo}"
 builds:
 - platform: "alpine"
   arch: "amd64"
-  asset_filename: "#{repo}_#{version}_ruby-2.4.4_alpine_linux_amd64.tar.gz"
+  asset_filename: "#{repo}_#{version}_alpine_linux_amd64.tar.gz"
   sha_filename: "#{repo}_#{version}_sha512-checksums.txt"
   filter:
   -  "entity.system.os == 'linux'"
@@ -12,7 +12,7 @@ builds:
   -  "entity.system.platform_release.split('.')[0] == '3'"
 - platform: "alpine3.8"
   arch: "amd64"
-  asset_filename: "#{repo}_#{version}_ruby-2.4.4_alpine3.8_linux_amd64.tar.gz"
+  asset_filename: "#{repo}_#{version}_alpine3.8_linux_amd64.tar.gz"
   sha_filename: "#{repo}_#{version}_sha512-checksums.txt"
   filter:
   -  "entity.system.os == 'linux'"
@@ -20,7 +20,7 @@ builds:
   -  "entity.system.platform == 'alpine'"
 - platform: "centos"
   arch: "amd64"
-  asset_filename: "#{repo}_#{version}_ruby-2.4.4_centos_linux_amd64.tar.gz"
+  asset_filename: "#{repo}_#{version}_centos_linux_amd64.tar.gz"
   sha_filename: "#{repo}_#{version}_sha512-checksums.txt"
   filter:
   -  "entity.system.os == 'linux'"
@@ -28,7 +28,7 @@ builds:
   -  "entity.system.platform_family == 'rhel'"
 - platform: "centos6"
   arch: "amd64"
-  asset_filename: "#{repo}_#{version}_ruby-2.4.4_centos6_linux_amd64.tar.gz"
+  asset_filename: "#{repo}_#{version}_centos6_linux_amd64.tar.gz"
   sha_filename: "#{repo}_#{version}_sha512-checksums.txt"
   filter:
   -  "entity.system.os == 'linux'"
@@ -37,7 +37,7 @@ builds:
   -  "entity.system.platform_release.split('.')[0] == '6'"
 - platform: "centos7"
   arch: "amd64"
-  asset_filename: "#{repo}_#{version}_ruby-2.4.4_centos7_linux_amd64.tar.gz"
+  asset_filename: "#{repo}_#{version}_centos7_linux_amd64.tar.gz"
   sha_filename: "#{repo}_#{version}_sha512-checksums.txt"
   filter:
   -  "entity.system.os == 'linux'"
@@ -46,7 +46,7 @@ builds:
   -  "entity.system.platform_release.split('.')[0] == '7'"
 - platform: "debian"
   arch: "amd64"
-  asset_filename: "#{repo}_#{version}_ruby-2.4.4_debian_linux_amd64.tar.gz"
+  asset_filename: "#{repo}_#{version}_debian_linux_amd64.tar.gz"
   sha_filename: "#{repo}_#{version}_sha512-checksums.txt"
   filter:
   -  "entity.system.os == 'linux'"
@@ -54,7 +54,7 @@ builds:
   -  "entity.system.platform_family == 'debian'"
 - platform: "debian9"
   arch: "amd64"
-  asset_filename: "#{repo}_#{version}_ruby-2.4.4_debian9_linux_amd64.tar.gz"
+  asset_filename: "#{repo}_#{version}_debian9_linux_amd64.tar.gz"
   sha_filename: "#{repo}_#{version}_sha512-checksums.txt"
   filter:
   -  "entity.system.os == 'linux'"
