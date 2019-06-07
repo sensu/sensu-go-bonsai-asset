@@ -1,9 +1,9 @@
-FROM sensu/sensu-ruby-runtime-2.4.4-debian:latest as builder
+FROM sensu/sensu-ruby-runtime-2.4.4-centos7:latest as builder
 ARG ASSET_GEM
 ARG GIT_REF
 ARG GIT_REPO
 WORKDIR /assets/build/
-RUN apt-get update && apt-get install -y git 
+RUN yum install -y git 
 RUN \
   gem install --no-ri --no-doc bundler && \
   printf "source 'https://rubygems.org'\n\ngem \"%s\", :git => \"%s\" , :ref => \"%s\"\n" ${ASSET_GEM} ${GIT_REPO} ${GIT_REF}| tee Gemfile 

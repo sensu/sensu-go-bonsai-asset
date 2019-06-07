@@ -20,19 +20,16 @@ echo $GEM_NAME $GIT_OWNER_REPO $TAG $GIT_REF
 mkdir dist
 GIT_REPO="https://github.com/${GIT_OWNER_REPO}.git"
 
-
+platforms=( alpine debian centos alpine3.8 debian9 centos7 centos6 )
+ruby_version=2.4.4
 if [ -d dist ]; then
-  # Build Debian asset
-  docker build --build-arg "ASSET_GEM=${GEM_NAME}" --build-arg "GIT_REPO=${GIT_REPO}"  --build-arg "GIT_REF=${GIT_REF}" -t ruby-plugin-debian -f ${WDIR}/ruby-runtime/Dockerfile.debian .
-  docker cp $(docker create --rm ruby-plugin-debian:latest sleep 0):/${GEM_NAME}.tar.gz ./dist/${GEM_NAME}_${TAG}_debian_linux_amd64.tar.gz
+  for platform in "${platforms[@]}"
+  do
 
-  # Build Alpine asset
-  docker build --build-arg "ASSET_GEM=${GEM_NAME}" --build-arg "GIT_REPO=${GIT_REPO}"  --build-arg "GIT_REF=${GIT_REF}" -t ruby-plugin-alpine:latest -f ${WDIR}/ruby-runtime/Dockerfile.alpine .
-  docker cp $(docker create --rm ruby-plugin-alpine:latest sleep 0):/${GEM_NAME}.tar.gz ./dist/${GEM_NAME}_${TAG}_alpine_linux_amd64.tar.gz
+  docker build --build-arg "ASSET_GEM=${GEM_NAME}" --build-arg "GIT_REPO=${GIT_REPO}"  --build-arg "GIT_REF=${GIT_REF}" -t ruby-plugin-${platform} -f ${WDIR}/ruby-runtime/Dockerfile.${platform} .
+  docker cp $(docker create --rm ruby-plugin-${platform}:latest sleep 0):/${GEM_NAME}.tar.gz ./dist/${GEM_NAME}_${TAG}_${platform}_linux_amd64.tar.gz
 
-  # Build CentOS asset
-  docker build --build-arg "ASSET_GEM=${GEM_NAME}" --build-arg "GIT_REPO=${GIT_REPO}"  --build-arg "GIT_REF=${GIT_REF}" -t ruby-plugin-centos:latest -f ${WDIR}/ruby-runtime/Dockerfile.centos .
-  docker cp $(docker create --rm ruby-plugin-centos:latest sleep 0):/${GEM_NAME}.tar.gz ./dist/${GEM_NAME}_${TAG}_centos_linux_amd64.tar.gz
+  done
 
   # Generate the sha512sum for all the assets
   files=$( ls dist/*.tar.gz )

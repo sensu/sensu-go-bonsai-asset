@@ -1,4 +1,4 @@
-FROM sensu/sensu-ruby-runtime:2.4.4-alpine as builder
+FROM sensu/sensu-ruby-runtime-2.4.4-alpine:latest as builder
 ARG ASSET_GEM
 ARG GIT_REF
 ARG GIT_REPO
