@@ -21,6 +21,11 @@ GIT_REPO="https://github.com/${TRAVIS_REPO_SLUG}.git"
 GIT_REF=${TRAVIS_COMMIT}
 
 platforms=( alpine debian centos alpine3.8 debian9 centos7 centos6 )
+if [[ "$PLATFORMS" ]]; then
+platforms=$PLATFORMS
+fi
+echo "Platforms: $platforms"	
+
 if [ -d dist ]; then
   for platform in "${platforms[@]}"
   do
