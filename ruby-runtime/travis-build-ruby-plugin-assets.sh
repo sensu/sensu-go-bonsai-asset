@@ -22,13 +22,14 @@ GIT_REF=${TRAVIS_COMMIT}
 
 platforms=( alpine debian centos alpine3.8 debian9 centos7 centos6 )
 if [[ "$PLATFORMS" ]]; then
-platforms=$PLATFORMS
+platforms=("${PLATFORMS[@]}")
 fi
-echo "Platforms: $platforms"	
+echo "Platforms: ${platforms[@]}"	
 
 if [ -d dist ]; then
   for platform in "${platforms[@]}"
   do
+  echo "Building for Platform: $platform"	  
   docker build --build-arg "ASSET_GEM=${GEM_NAME}" --build-arg "GIT_REPO=${GIT_REPO}"  --build-arg "GIT_REF=${GIT_REF}" -t ruby-plugin-${platform} -f "${WDIR}/ruby-runtime/Dockerfile.${platform}" .
   docker cp $(docker create --rm ruby-plugin-${platform}:latest sleep 0):/${GEM_NAME}.tar.gz ./dist/${GEM_NAME}_${TAG}_${platform}_linux_amd64.tar.gz
   done
