@@ -5,14 +5,16 @@
 # TravisCI specific asset build script.
 #   Uses several TravisCI specific environment variables 
 ##
-[[ -z "$GITHUB_TOKEN" ]] && { echo "GITHUB_TOKEN is empty" ; }
+[[ -z "$GITHUB_TOKEN" ]] && { echo "GITHUB_TOKEN is empty, upload disabled" ; }
+[[ -z "$TRAVIS_REPO_SLUG" ]] && { echo "TRAVIS_REPO_SLUG is empty, upload disabled" ; }
 [[ -z "$1" ]] && { echo "Parameter 1, GEM_NAME is empty" ; exit 1; }
-[[ -z "$TRAVIS_REPO_SLUG" ]] && { echo "TRAVIS_REPO_SLUG is empty" ; exit 1; }
 [[ -z "$TRAVIS_COMMIT" ]] && { echo "TRAVIS_COMMIT is empty" ; exit 1; }
 
 GEM_NAME=$1
 TAG=$TRAVIS_TAG
+CURRENT_COMMIT=$(git rev-parse HEAD)
 [[ -z "$TAG" ]] && { echo "TRAVIS_TAG is empty" ; TAG="0.0.1"; }
+[[ -z "$TRAVIS_COMMIT" ]] && { echo "TRAVIS_COMMIT is empty, using current commit" ; TRAVIS_COMMIT=$CURRENT_COMMIT; }
 echo $GEM_NAME $TRAVIS_REPO_SLUG $TAG $TRAVIS_COMMIT
 
 mkdir dist
@@ -33,8 +35,12 @@ if [ -d dist ]; then
   for filename in $files; do
     if [[ "$TRAVIS_TAG" ]]; then
       if [[ "$GITHUB_TOKEN" ]]; then
-        echo "upload $filename"
-        ${WDIR}/github-release-upload.sh github_api_token=$GITHUB_TOKEN repo_slug="$TRAVIS_REPO_SLUG" tag="${TRAVIS_TAG}" filename="$filename"
+        if [[ "$TRAVIS_REPO_SLUG" ]]l then
+          echo "upload $filename"
+          ${WDIR}/github-release-upload.sh github_api_token=$GITHUB_TOKEN repo_slug="$TRAVIS_REPO_SLUG" tag="${TRAVIS_TAG}" filename="$filename"
+        else
+	  echo "TRAVIS_REPO_SLUG unset, skipping upload of $filename"      
+	fi	 
       else
 	echo "GITUB_TOKEN unset, skipping upload of $filename"      
       fi	
