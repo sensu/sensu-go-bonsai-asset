@@ -8,7 +8,6 @@
 [[ -z "$GITHUB_TOKEN" ]] && { echo "GITHUB_TOKEN is empty, upload disabled" ; }
 [[ -z "$TRAVIS_REPO_SLUG" ]] && { echo "TRAVIS_REPO_SLUG is empty, upload disabled" ; }
 [[ -z "$1" ]] && { echo "Parameter 1, GEM_NAME is empty" ; exit 1; }
-[[ -z "$TRAVIS_COMMIT" ]] && { echo "TRAVIS_COMMIT is empty" ; exit 1; }
 
 GEM_NAME=$1
 TAG=$TRAVIS_TAG
