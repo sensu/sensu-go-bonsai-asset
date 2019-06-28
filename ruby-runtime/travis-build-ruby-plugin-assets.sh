@@ -6,7 +6,7 @@
 #   Uses several TravisCI specific environment variables 
 ##
 [[ -z "$GITHUB_TOKEN" ]] && { echo "GITHUB_TOKEN is empty, upload disabled" ; }
-[[ -z "$TRAVIS_REPO_SLUG" ]] && { echo "TRAVIS_REPO_SLUG is empty, upload disabled" ; }
+[[ -z "$TRAVIS_REPO_SLUG" ]] && { echo "TRAVIS_REPO_SLUG is empty"; exit 1; }
 [[ -z "$1" ]] && { echo "Parameter 1, GEM_NAME is empty" ; exit 1; }
 
 GEM_NAME=$1
@@ -21,9 +21,6 @@ GIT_REPO="https://github.com/${TRAVIS_REPO_SLUG}.git"
 GIT_REF=${TRAVIS_COMMIT}
 
 platforms=( alpine debian centos alpine3.8 debian9 centos7 centos6 )
-if [[ "$PLATFORMS" ]]; then
-platforms=("${PLATFORMS[@]}")
-fi
 echo "Platforms: ${platforms[@]}"	
 
 if [ -d dist ]; then
