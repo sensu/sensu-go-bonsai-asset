@@ -34,7 +34,7 @@ if [ -d dist ]; then
   for filename in $files; do
     if [[ "$TRAVIS_TAG" ]]; then
       if [[ "$GITHUB_TOKEN" ]]; then
-        if [[ "$TRAVIS_REPO_SLUG" ]]l then
+        if [[ "$TRAVIS_REPO_SLUG" ]]; then
           echo "upload $filename"
           ${WDIR}/github-release-upload.sh github_api_token=$GITHUB_TOKEN repo_slug="$TRAVIS_REPO_SLUG" tag="${TRAVIS_TAG}" filename="$filename"
         else
