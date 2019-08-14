@@ -70,6 +70,8 @@ if [ -d dist ]; then
       fi
     fi
   fi
+  # Generate github release edit event 
+  ${WDIR}/github-release-event.sh github_api_token=$GITHUB_TOKEN repo_slug="$TRAVIS_REPO_SLUG" tag="${TRAVIS_TAG}"
 
 else
   echo "error dist directory is missing"
