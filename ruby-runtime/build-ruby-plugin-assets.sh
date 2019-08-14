@@ -59,6 +59,9 @@ if [ -d dist ]; then
     fi
   fi
 
+  # Generate github release edit event 
+  ${WDIR}/github-release-event.sh github_api_token=$GITHUB_TOKEN repo_slug="$GIT_OWNER_REPO" tag="${GITHUB_RELEASE_TAG}" 
+
 else
   echo "error dist directory is missing"
 fi
