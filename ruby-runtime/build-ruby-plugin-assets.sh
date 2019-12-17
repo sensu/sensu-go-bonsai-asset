@@ -20,7 +20,7 @@ echo $GEM_NAME $GIT_OWNER_REPO $TAG $GIT_REF
 mkdir dist
 GIT_REPO="https://github.com/${GIT_OWNER_REPO}.git"
 
-platforms=( alpine debian centos alpine3.8 debian9 centos7 centos6 )
+platforms=( alpine debian alpine3.8 debian9 centos7 centos6 )
 ruby_version=2.4.4
 if [ -d dist ]; then
   for platform in "${platforms[@]}"
