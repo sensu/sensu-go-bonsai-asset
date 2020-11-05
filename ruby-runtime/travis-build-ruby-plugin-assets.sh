@@ -9,7 +9,7 @@
 [[ -z "$TRAVIS_REPO_SLUG" ]] && { echo "TRAVIS_REPO_SLUG is empty"; exit 1; }
 [[ -z "$1" ]] && { echo "Parameter 1, GEM_NAME is empty" ; exit 1; }
 if [[ -z "$2" ]]; then 
-  echo "Parameter 2, PLATFORMS is empty, using default set" ; platforms=( alpine debian alpine3.8 debian9 centos7 centos6 ); 
+  echo "Parameter 2, PLATFORMS is empty, using default set" ; platforms=( alpine debian alpine3.8 debian9 centos8 centos7 centos6 ); 
 else
   IFS=', ' read -r -a platforms <<< "$2"
 fi
