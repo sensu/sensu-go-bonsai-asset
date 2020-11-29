@@ -20,8 +20,7 @@ echo $GEM_NAME $GIT_OWNER_REPO $TAG $GIT_REF
 mkdir dist
 GIT_REPO="https://github.com/${GIT_OWNER_REPO}.git"
 
-platforms=( alpine debian alpine3.8 debian9 centos7 centos6 )
-ruby_version=2.4.4
+platforms=( alpine debian alpine3.8 debian9 centos8 centos7 centos6 )
 if [ -d dist ]; then
   for platform in "${platforms[@]}"
   do
@@ -39,7 +38,7 @@ if [ -d dist ]; then
       echo "upload $filename"
       ${WDIR}/github-release-upload.sh github_api_token=$GITHUB_TOKEN repo_slug="$GIT_OWNER_REPO" tag="${GITHUB_RELEASE_TAG}" filename="$filename"
     fi
-  done 
+  done
   file=$(basename "${files[0]}")
   IFS=_ read -r package leftover <<< "$file"
   unset leftover
@@ -59,10 +58,9 @@ if [ -d dist ]; then
     fi
   fi
 
-  # Generate github release edit event 
-  ${WDIR}/github-release-event.sh github_api_token=$GITHUB_TOKEN repo_slug="$GIT_OWNER_REPO" tag="${GITHUB_RELEASE_TAG}" 
+  # Generate github release edit event
+  ${WDIR}/github-release-event.sh github_api_token=$GITHUB_TOKEN repo_slug="$GIT_OWNER_REPO" tag="${GITHUB_RELEASE_TAG}"
 
 else
   echo "error dist directory is missing"
 fi
-
