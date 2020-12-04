@@ -18,7 +18,7 @@ before_deploy:
 Create a deploy provider to run the travis build script
 ```
   - provider: script
-    script: bonsai/ruby-runtime/travis-build-bonsai-assets.sh sensu-plugins-disk-checks
+    script: bonsai/ruby-runtime/travis-build-ruby-plugin-assets.sh sensu-plugins-disk-checks
     skip_cleanup: true
     on:
       tags: true
