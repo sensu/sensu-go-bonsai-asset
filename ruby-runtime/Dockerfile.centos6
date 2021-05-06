@@ -3,6 +3,7 @@ ARG ASSET_GEM
 ARG GIT_REF
 ARG GIT_REPO
 WORKDIR /assets/build/
+RUN curl https://www.getpagespeed.com/files/centos6-eol.repo --output /etc/yum.repos.d/CentOS-Base.repo
 RUN yum install -y git 
 RUN \
   gem install --no-ri --no-doc bundler && \
