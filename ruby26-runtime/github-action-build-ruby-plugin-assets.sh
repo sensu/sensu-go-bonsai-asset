@@ -5,17 +5,13 @@
 [[ -z "$WDIR" ]] && { echo "WDIR is empty using bonsai/" ; WDIR="bonsai/"; }
 
 ##
-# TravisCI specific asset build script.
-#   Uses several TravisCI specific environment variables 
+#   Setup parameters
 ##
 [[ -z "$GITHUB_TOKEN" ]] && { echo "GITHUB_TOKEN is empty, upload disabled" ; }
-[[ -z "$TRAVIS_REPO_SLUG" ]] && { echo "TRAVIS_REPO_SLUG is empty"; exit 1; }
+[[ -z "$REPO_SLUG" ]] && { echo "REPO_SLUG is empty"; exit 1; }
 [[ -z "$1" ]] && { echo "Parameter 1, GEM_NAME is empty" ; exit 1; }
-if [[ -z "$2" ]]; then 
-  echo "Parameter 2, PLATFORMS is empty, using default set" ; platforms=( alpine alpine3.8 debian debian9 centos8 centos7 amzn1 amzn2 )
-else
-  IFS=', ' read -r -a platforms <<< "$2"
-fi
+: ${PLATFORMS:=$2}
+IFS=', ' read -r -a platforms <<< ${PLATFORMS:="alpine,alpine3.8,debian,debian9,centos8,centos7,amzn1,amzn2"}
 
 
 GEM_NAME=$1
