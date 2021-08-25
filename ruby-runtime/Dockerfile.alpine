@@ -5,7 +5,9 @@ ARG GIT_REPO
 WORKDIR /assets/build/
 RUN apk add git
 RUN whoami
+RUN chmod -R a+w /opt/rubies/ruby-2.4.4/lib/ruby/gems/2.4.0
 RUN ls -lart /opt/rubies/ruby-2.4.4/lib/ruby/gems/2.4.0 
+
 RUN \
   sudo gem install --no-ri --no-doc bundler && \
   printf "source 'https://rubygems.org'\n\ngem \"%s\", :git => \"%s\" , :ref => \"%s\"\n" ${ASSET_GEM} ${GIT_REPO} ${GIT_REF}| tee Gemfile 
