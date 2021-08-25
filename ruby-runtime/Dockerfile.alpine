@@ -8,7 +8,6 @@ RUN which gem
 RUN which ruby
 RUN ruby --version
 RUN whoami
-RUN chmod -R a+w /opt/rubies/ruby-2.4.4 
 RUN ls -lart /opt/rubies/ruby-2.4.4/lib/ruby/gems/2.4.0 
 RUN gem install --no-ri --no-doc bundler 
 RUN printf "source 'https://rubygems.org'\n\ngem \"%s\", :git => \"%s\" , :ref => \"%s\"\n" ${ASSET_GEM} ${GIT_REPO} ${GIT_REF}| tee Gemfile 
