@@ -10,12 +10,15 @@ else
 fi
 [[ -z "$WDIR" ]] && { echo "WDIR is empty using bonsai/" ; WDIR="bonsai/"; }
 
-if [[ "$INSTALL_DOCKER" ]] ; then
-       	echo "Install latest docker"
+if [[ "$TRAVIS" == "true" ]] && [[ ! -z ${TRAVIS_BUILD_ID} ]]; then
+       	echo "Running on TravisCI"
+	echo "Installing latest docker"
         curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
         sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
         sudo apt-get update
         sudo apt-get -y -o Dpkg::Options::="--force-confnew" install docker-ce
+else
+       	echo "Not running on TravisCI"
 fi	
 
 ##
@@ -96,9 +99,11 @@ if [ -d dist ]; then
     fi
     fi
   fi
-  # Generate github release edit event 
-  ${WDIR}/github-release-event.sh github_api_token=$GITHUB_TOKEN repo_slug="$TRAVIS_REPO_SLUG" tag="${TRAVIS_TAG}"
 
+  if [[ "$TRAVIS_TAG" ]]; then
+    # Generate github release edit event 
+    ${WDIR}/github-release-event.sh github_api_token=$GITHUB_TOKEN repo_slug="$TRAVIS_REPO_SLUG" tag="${TRAVIS_TAG}"
+  fi 
 else
   echo "error dist directory is missing"
 fi
