@@ -92,12 +92,12 @@ if [ -d dist ]; then
       if [[ "$GITHUB_TOKEN" ]]; then
         echo "upload ${sha512_file}"
         ${WDIR}/github-release-upload.sh github_api_token=$GITHUB_TOKEN repo_slug="$TRAVIS_REPO_SLUG" tag="${TRAVIS_TAG}" filename="dist/${sha512_file}"
+        # Generate github release edit event 
+        ${WDIR}/github-release-event.sh github_api_token=$GITHUB_TOKEN repo_slug="$TRAVIS_REPO_SLUG" tag="${TRAVIS_TAG}"
       else
 	echo "GITUB_TOKEN unset, skipping upload of ${sha512_file}"      
       fi
     fi
-    # Generate github release edit event 
-    ${WDIR}/github-release-event.sh github_api_token=$GITHUB_TOKEN repo_slug="$TRAVIS_REPO_SLUG" tag="${TRAVIS_TAG}"
   fi
 
 
