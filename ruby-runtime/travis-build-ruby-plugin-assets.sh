@@ -1,8 +1,22 @@
 #!/bin/bash
 # Argument 1: GEM name
 # Argument 2: comma separated list of platforms to build
-
+if [[ "$GITHUB_UPLOAD" ]]; then
+       	echo "GITHUB UPLOAD ACTIVE: waiting 10 seconds" 
+	sleep 10
+else
+       	echo "GITHUB UPLOAD ABORTED: waiting 10 seconds" 
+	sleep 10
+fi
 [[ -z "$WDIR" ]] && { echo "WDIR is empty using bonsai/" ; WDIR="bonsai/"; }
+
+if [[ "$INSTALL_DOCKER" ]] ; then
+       	echo "Install latest docker"
+        curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+        sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
+        sudo apt-get update
+        sudo apt-get -y -o Dpkg::Options::="--force-confnew" install docker-ce
+fi	
 
 ##
 # TravisCI specific asset build script.
@@ -12,7 +26,7 @@
 [[ -z "$TRAVIS_REPO_SLUG" ]] && { echo "TRAVIS_REPO_SLUG is empty"; exit 1; }
 [[ -z "$1" ]] && { echo "Parameter 1, GEM_NAME is empty" ; exit 1; }
 if [[ -z "$2" ]]; then 
-  echo "Parameter 2, PLATFORMS is empty, using default set" ; platforms=( alpine alpine3.8 debian debian9 centos8 centos7 centos6 )
+  echo "Parameter 2, PLATFORMS is empty, using default set" ; platforms=( alpine )
 else
   IFS=', ' read -r -a platforms <<< "$2"
 fi
@@ -42,6 +56,7 @@ if [ -d dist ]; then
   # Generate the sha512sum for all the assets
   files=$( ls dist/*.tar.gz )
   echo $files
+  if [[ "$GITHUB_UPLOAD" ]]; then
   for filename in $files; do
     if [[ "$TRAVIS_TAG" ]]; then
       if [[ "$GITHUB_TOKEN" ]]; then
@@ -56,6 +71,7 @@ if [ -d dist ]; then
       fi	
     fi
   done 
+  fi
   file=$(basename "${files[0]}")
   IFS=_ read -r package leftover <<< "$file"
   unset leftover
@@ -69,6 +85,7 @@ if [ -d dist ]; then
     echo ""
     cat "${sha512_file}"
     cd ..
+    if [[ "$GITHUB_UPLOAD" ]]; then
     if [[ "$TRAVIS_TAG" ]]; then
       if [[ "$GITHUB_TOKEN" ]]; then
         echo "upload ${sha512_file}"
@@ -76,6 +93,7 @@ if [ -d dist ]; then
       else
 	echo "GITUB_TOKEN unset, skipping upload of ${sha512_file}"      
       fi
+    fi
     fi
   fi
   # Generate github release edit event 
