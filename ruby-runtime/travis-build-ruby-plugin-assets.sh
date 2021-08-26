@@ -17,11 +17,30 @@ else
   IFS=', ' read -r -a platforms <<< "$2"
 fi
 
+if [[ "$TRAVIS" == "true" ]] && [[ ! -z ${TRAVIS_BUILD_ID} ]]; then
+        echo "Running on TravisCI"
+        echo "Installing latest docker"
+        curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+        sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
+        sudo apt-get update
+        sudo apt-get -y -o Dpkg::Options::="--force-confnew" install docker-ce
+else
+        echo "Not running on TravisCI"
+fi     
+
 
 GEM_NAME=$1
-TAG=$TRAVIS_TAG
+if [[ -z "$TRAVIS_TAG" ]]; then
+       	echo "TRAVIS_TAG is empty"
+else
+	TAG=${TRAVIS_TAG}
+fi
+
+if [[ -z "$TAG" ]]; then
+	TAG="0.0.1"
+fi
+
 CURRENT_COMMIT=$(git rev-parse HEAD)
-[[ -z "$TAG" ]] && { echo "TRAVIS_TAG is empty" ; TAG="0.0.1"; }
 [[ -z "$TRAVIS_COMMIT" ]] && { echo "TRAVIS_COMMIT is empty, using current commit" ; TRAVIS_COMMIT=$CURRENT_COMMIT; }
 echo $GEM_NAME $TRAVIS_REPO_SLUG $TAG $TRAVIS_COMMIT
 
@@ -77,9 +96,10 @@ if [ -d dist ]; then
 	echo "GITUB_TOKEN unset, skipping upload of ${sha512_file}"      
       fi
     fi
+    # Generate github release edit event 
+    ${WDIR}/github-release-event.sh github_api_token=$GITHUB_TOKEN repo_slug="$TRAVIS_REPO_SLUG" tag="${TRAVIS_TAG}"
   fi
-  # Generate github release edit event 
-  ${WDIR}/github-release-event.sh github_api_token=$GITHUB_TOKEN repo_slug="$TRAVIS_REPO_SLUG" tag="${TRAVIS_TAG}"
+
 
 else
   echo "error dist directory is missing"
