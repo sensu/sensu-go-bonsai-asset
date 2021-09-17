@@ -27,8 +27,18 @@ if [ -d dist ]; then
   do
 
   docker build --build-arg "ASSET_GEM=${GEM_NAME}" --build-arg "GIT_REPO=${GIT_REPO}"  --build-arg "GIT_REF=${GIT_REF}" -t ruby-plugin-${platform} -f ${WDIR}/ruby26-runtime/Dockerfile.${platform} .
-  docker cp $(docker create --rm ruby-plugin-${platform}:latest sleep 0):/${GEM_NAME}.tar.gz ./dist/${GEM_NAME}_${TAG}_${platform}_linux_amd64.tar.gz
+  status=$?
+  if test $status -ne 0; then
+        echo "Docker build for platform: ${platform} failed with status: ${status}"
+        exit 1
+  fi
 
+  docker cp $(docker create --rm ruby-plugin-${platform}:latest sleep 0):/${GEM_NAME}.tar.gz ./dist/${GEM_NAME}_${TAG}_${platform}_linux_amd64.tar.gz
+  status=$?
+  if test $status -ne 0; then
+        echo "Docker cp for platform: ${platform} failed with status: ${status}"
+        exit 1
+  fi
   done
 
   # Generate the sha512sum for all the assets
